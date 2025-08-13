@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators.faq_page_locators import FaqPageLocators
@@ -8,19 +9,16 @@ class FaqPage(BasePage):
         self.driver = driver
         self.locators = FaqPageLocators
 
+    @allure.step('Метод клика на вопрос')
     def click_question(self, index):
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        element = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(self.locators.QUESTIONS[index])
-        )
-        self.driver.execute_script("arguments[0].click();", element)
+        self.scroll_to_end()
+        self.click_to_element(self.locators.QUESTIONS[index])
 
+    @allure.step('Метод вывода ответа на вопрос')
     def is_answer_visible(self, index):
-        return WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(self.locators.ANSWERS[index])
-        ).is_displayed()
+        return self.find_element_with_wait(self.locators.ANSWERS[index]).is_displayed()
     
+    @allure.step('Метод вывода текста ответа')
     def get_answer_text(self, index):
-        return WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(self.locators.ANSWERS[index])
-        ).text
+        return self.find_element_with_wait(self.locators.ANSWERS[index]).text    
+    

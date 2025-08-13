@@ -37,7 +37,23 @@ class BasePage:
     @allure.step("Ожидание загрузки сайта")
     def wait_loading_site(self, url):
         WebDriverWait(self.driver,10).until(expected_conditions.url_to_be(url))
-        
-    @allure.step("Получение текущего url")
+    
+    @allure.step('Скролл до конца страницы')
+    def scroll_to_end(self):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    
+    @allure.step('Метод ожидания определенного количества открытых окон')
+    def wait_numbers_of_window_to_be(self, number):
+        WebDriverWait(self.driver, 10).until(EC.number_of_windows_to_be(number))
+    
+    @allure.step('Метод смены вкладки браузера')
+    def switch_to_window(self, index):
+        self.driver.switch_to.window(self.driver.window_handles[index])
+    
+    @allure.step('Метод ожидания загрузки страницы')    
+    def wait_for_url_contains(self, text):
+        WebDriverWait(self.driver, 10).until(EC.url_contains(text))
+
+    @allure.step('Получение текущего url')
     def get_current_url(self):
-        return self.find_element_with_wait.current_url
+        return self.driver.current_url  

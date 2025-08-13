@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators.order_page_locators import OrderPageLocators
 from page_objects.base_page import BasePage
+from urls import URLs
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -27,11 +28,25 @@ class MainPage(BasePage):
     @allure.step('Кликаем на логотип Самокат')
     def click_scooter_logo(self):
         self.click_to_element(self.SCOOTER_LOGO)
-        WebDriverWait(self.driver, 10).until(EC.url_to_be("https://qa-scooter.praktikum-services.ru/"))
+        self.wait_loading_site(URLs.BASE_URL)
 
     @allure.step('Кликаем на логотип Яндекс')
     def click_yandex_logo(self):
         self.click_to_element(self.YANDEX_LOGO)
-        WebDriverWait(self.driver, 10).until(EC.number_of_windows_to_be(2))
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        WebDriverWait(self.driver, 10).until(EC.url_contains("dzen.ru"))
+        self.wait_numbers_of_window_to_be(2)
+        self.switch_to_window(1)
+        self.wait_for_url_contains(URLs.YANDEX_URL)
+
+        
+    # @allure.step('Кликаем на логотип Самокат')
+    # def click_scooter_logo(self):
+    #     self.click_to_element(self.SCOOTER_LOGO)
+    #     WebDriverWait(self.driver, 10).until(EC.url_to_be("https://qa-scooter.praktikum-services.ru/"))
+
+
+    # @allure.step('Кликаем на логотип Яндекс')
+    # def click_yandex_logo(self):
+    #     self.click_to_element(self.YANDEX_LOGO)
+    #     WebDriverWait(self.driver, 10).until(EC.number_of_windows_to_be(2))
+    #     self.driver.switch_to.window(self.driver.window_handles[1])
+    #     WebDriverWait(self.driver, 10).until(EC.url_contains("dzen.ru"))
